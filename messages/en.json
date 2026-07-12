@@ -1,0 +1,50 @@
+{
+  "Navigation": {
+    "home": "Home",
+    "about": "About Us",
+    "services": "Services",
+    "vacancies": "Careers",
+    "contact": "Contact",
+    "cta": "View Vacancies"
+  },
+  "Hero": {
+    "title1": "A Clear Career Path.",
+    "title2": "A Trusted Work Environment.",
+    "cta_primary": "View Vacancies",
+    "cta_secondary": "About Us",
+    "trust_text": "Registration is completely free."
+  },
+  "Highlights": {
+    "process": "Easy Process",
+    "info": "Clear Information",
+    "responsive": "Responsive Team"
+  },
+  "Services": {
+    "title": "Our Services"
+  },
+  "Vacancies": {
+    "title": "Available Vacancies",
+    "apply": "Apply Now",
+    "detail": "View Details",
+    "requirements": "Requirements",
+    "responsibilities": "Responsibilities",
+    "recruitment_steps": "Recruitment Steps"
+  },
+  "Application": {
+    "success_title": "Application Successful!",
+    "success_message": "Thank you. Our recruitment team will contact you soon via WhatsApp.",
+    "back_to_vacancies": "Back to Vacancies",
+    "back_to_home": "Back to Home"
+  },
+  "Form": {
+    "name": "Full Name",
+    "whatsapp": "WhatsApp Number",
+    "domicile": "City of Residence",
+    "age": "Age",
+    "education": "Latest Education",
+    "experience": "Work Experience (Years)",
+    "agreement": "I declare that the information provided is true.",
+    "submit": "Submit Application",
+    "validation_required": "This field is required."
+  }
+}

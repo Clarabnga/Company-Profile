@@ -1,0 +1,50 @@
+{
+  "Navigation": {
+    "home": "Beranda",
+    "about": "Tentang Kami",
+    "services": "Layanan",
+    "vacancies": "Lowongan",
+    "contact": "Kontak",
+    "cta": "Lihat Lowongan"
+  },
+  "Hero": {
+    "title1": "Karier yang Jelas.",
+    "title2": "Lingkungan Kerja yang Terpercaya.",
+    "cta_primary": "Lihat Lowongan",
+    "cta_secondary": "Tentang Kami",
+    "trust_text": "Pendaftaran tidak dipungut biaya."
+  },
+  "Highlights": {
+    "process": "Proses Mudah",
+    "info": "Informasi Jelas",
+    "responsive": "Tim Rekrutmen Responsif"
+  },
+  "Services": {
+    "title": "Layanan Kami"
+  },
+  "Vacancies": {
+    "title": "Lowongan Tersedia",
+    "apply": "Lamar Sekarang",
+    "detail": "Lihat Detail",
+    "requirements": "Persyaratan",
+    "responsibilities": "Tanggung Jawab",
+    "recruitment_steps": "Tahapan Rekrutmen"
+  },
+  "Application": {
+    "success_title": "Pendaftaran Berhasil!",
+    "success_message": "Terima kasih. Tim rekrutmen kami akan segera menghubungi Anda melalui WhatsApp.",
+    "back_to_vacancies": "Kembali ke Lowongan",
+    "back_to_home": "Ke Beranda"
+  },
+  "Form": {
+    "name": "Nama Lengkap",
+    "whatsapp": "Nomor WhatsApp",
+    "domicile": "Kota Domisili",
+    "age": "Usia",
+    "education": "Pendidikan Terakhir",
+    "experience": "Pengalaman Kerja (Tahun)",
+    "agreement": "Saya menyatakan bahwa data yang saya isi adalah benar.",
+    "submit": "Kirim Lamaran",
+    "validation_required": "Field ini wajib diisi."
+  }
+}
