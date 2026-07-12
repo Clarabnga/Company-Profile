@@ -100,3 +100,15 @@ Replace files in `public/images` with approved workplace photography and retain 
 ## Frontend-only limitations and next steps
 
 Applications are validated and simulated in browser memory, then redirected; they are not stored, uploaded, emailed, or sent to an API. The admin preview is fictional presentation data with frontend filters only. WhatsApp links open a chat but use no WhatsApp API. A production phase should add a secured recruitment API, encrypted database, retention controls, consent logging, rate limiting, upload scanning if files are later required, recruiter workflow integration, monitoring, and a company-approved legal privacy policy.
+
+## Presentation-readiness revision
+
+The presentation revision strengthens the live mockup without changing its frontend-only scope. Valid application and success URLs now receive localized vacancy metadata, invalid slugs return HTTP 404, English pages emit `lang="en"`, private workflow pages are noindex, and the sitemap contains only public company, branch, listing, and vacancy-detail routes.
+
+Temporary presentation contacts are centralized in `src/data/site.ts`:
+
+- Company: `info@gardakaryanusantara.id`, `+62 811 9000 2100`
+- Bali recruitment: `rekrutmen.bali@gardakaryanusantara.id`, `+62 811 9000 2200`
+- Bali office: Jl. Bypass Ngurah Rai, Denpasar, Bali
+
+Homepage recruitment content now appears immediately after the trust highlights. Company screening and supervision practices, Bali business sectors, candidate guidance, office directions, application reassurance, and success next steps use presentation-ready ID/EN copy. These contacts remain replaceable temporary information and must be verified by the company before public launch.

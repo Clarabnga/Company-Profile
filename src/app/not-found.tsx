@@ -1,2 +1,2 @@
 ﻿import Link from "next/link";
-export default function NotFound(){return <html lang="id"><body style={{fontFamily:"sans-serif",padding:"4rem",textAlign:"center"}}><main><p>404</p><h1>Halaman tidak ditemukan</h1><p>Page not found.</p><Link href="/id">Kembali ke beranda / Back home</Link></main></body></html>}
+export default function NotFound(){return <html lang="id"><body className="not-found-body"><main className="not-found"><span>404</span><h1>Halaman tidak ditemukan</h1><p>Page not found. Tautan mungkin sudah berubah atau tidak lagi tersedia.</p><div className="actions"><Link className="button" href="/id">Kembali ke Beranda</Link><Link className="button outline" href="/en">Back to Home</Link></div></main></body></html>}

@@ -66,3 +66,43 @@
 - [x] Accessibility: Semantic HTML, Keyboard support, Focus state, Contrast, ARIA, Labels, Validation.
 - [x] README.md with Installation Guide, Folder Structure, Mock Data, and explanation of why Option B was selected.
 
+
+## Presentation Readiness Revision
+
+### Critical routing and SEO
+- [x] Give every valid ID/EN application and success route localized, vacancy-aware metadata
+- [x] Return a real localized 404 response for unknown paths and vacancy slugs
+- [x] Set the document language correctly for Indonesian and English
+- [x] Add canonical and equivalent-language alternates to every public route
+- [x] Mark application, success, admin preview, and error routes as noindex
+- [x] Remove admin preview and non-public application routes from sitemap
+- [x] Verify Organization, Bali LocalBusiness, JobPosting, and Breadcrumb structured data
+
+### Presentation content
+- [x] Replace `.example`, old telephone numbers, old addresses, and weak social/contact values centrally
+- [x] Remove map-placeholder, demo, mock, frontend-only, and technical submission language from public UI
+- [x] Add grounded company screening, briefing, supervision, evaluation, and branch-coordination content
+- [x] Add Bali-specific hospitality, villas, retail, offices, events, residential, and facility positioning
+- [x] Polish Indonesian and English terminology consistently
+- [x] Improve candidate guidance and success-page next steps
+
+### Information hierarchy and visual polish
+- [x] Move featured vacancies and recruitment process immediately after homepage trust highlights
+- [x] Reduce homepage repetition and keep detailed story/services on their dedicated pages
+- [x] Make vacancy cards faster to scan and visually prioritize Apply
+- [x] Reorder vacancy details and add a non-obstructive mobile apply action
+- [x] Replace map placeholder with a presentable location panel and directions link
+- [x] Vary section composition while retaining the Modern Recruitment identity
+
+### Contact, mobile, and accessibility
+- [x] Encode localized WhatsApp messages and centralize formatted phone values
+- [x] Validate all social, email, office, and external links with safe attributes
+- [x] Review 360, 390, 768, 1024, and 1440 layouts for overflow and overlap
+- [x] Review menu focus, accordions, headings, labels, errors, contrast, alt text, and reduced motion
+
+### Verification and delivery
+- [x] Run ESLint, strict TypeScript, and production build
+- [x] Audit all valid vacancy slugs in ID and EN, including refresh-safe application/success routes
+- [x] Confirm prohibited public placeholder/developer terms are absent
+- [x] Update README, commit, push, and verify the Vercel redeployment
+
