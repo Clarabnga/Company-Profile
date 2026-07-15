@@ -1,16 +1,114 @@
-﻿import type {Metadata} from "next";
+import type {Metadata} from "next";
 import {notFound} from "next/navigation";
 import {Site} from "@/components/Site";
-import {getVacancy,local,type Locale} from "@/data/site";
+import {
+  alternateLocale,
+  branchLabels,
+  isLocale,
+  resolveRoute,
+  routeHref,
+  type Locale,
+  type RouteInfo,
+} from "@/data/routes";
+import {getVacancy,local} from "@/data/site";
 
-type RouteKind="home"|"about"|"services"|"contact"|"privacy"|"admin"|"bali"|"careers"|"job"|"apply"|"success";
-type RouteInfo={kind:RouteKind;slug?:string};
-const staticRoutes:Record<Locale,Record<string,RouteKind>>={
- id:{"":"home","tentang-kami":"about","layanan":"services","kontak":"contact","kebijakan-privasi":"privacy","admin-preview":"admin","bali":"bali","bali/lowongan":"careers"},
- en:{"":"home","about":"about","services":"services","contact":"contact","privacy-policy":"privacy","admin-preview":"admin","bali":"bali","bali/careers":"careers"}
-};
-function resolveRoute(locale:Locale,path:string[]):RouteInfo|null{const joined=path.join("/");const basic=staticRoutes[locale][joined];if(basic)return{kind:basic};const careerPrefix=locale==="id"?"bali/lowongan":"bali/careers";const applyPrefix=locale==="id"?"bali/lamar":"bali/apply";if(path.length===3&&path.slice(0,2).join("/")===careerPrefix)return getVacancy(path[2])?{kind:"job",slug:path[2]}:null;if(path.length===3&&path.slice(0,2).join("/")===applyPrefix)return getVacancy(path[2])?{kind:"apply",slug:path[2]}:null;const successSegment=locale==="id"?"berhasil":"success";if(path.length===4&&path.slice(0,2).join("/")===applyPrefix&&path[3]===successSegment)return getVacancy(path[2])?{kind:"success",slug:path[2]}:null;return null}
-function equivalent(locale:Locale,path:string[]){const value=path.join("/");if(locale==="id")return value.replace(/^tentang-kami/,"about").replace(/^layanan/,"services").replace(/^kontak/,"contact").replace(/^kebijakan-privasi/,"privacy-policy").replace(/^bali\/lowongan/,"bali/careers").replace(/^bali\/lamar/,"bali/apply").replace(/\/berhasil$/,"/success");return value.replace(/^about/,"tentang-kami").replace(/^services/,"layanan").replace(/^contact/,"kontak").replace(/^privacy-policy/,"kebijakan-privasi").replace(/^bali\/careers/,"bali/lowongan").replace(/^bali\/apply/,"bali/lamar").replace(/\/success$/,"/berhasil")}
-function pageCopy(locale:Locale,route:RouteInfo){const id=locale==="id";const vacancy=route.slug?getVacancy(route.slug):undefined;switch(route.kind){case"home":return[id?"Solusi Outsourcing Profesional untuk Operasional Bisnis":"Professional Outsourcing for Business Operations",id?"Layanan tenaga kerja terlatih dan terstruktur untuk mendukung keamanan serta efisiensi operasional perusahaan.":"Trained, well-managed personnel supporting secure and efficient business operations."];case"about":return[id?"Tentang Kami":"About Us",id?"Profil, cara kerja, dan komitmen operasional PT Garda Karya Nusantara.":"Learn how PT Garda Karya Nusantara selects, prepares, and supervises operational personnel."];case"services":return[id?"Layanan Keamanan dan Outsourcing":"Security and Outsourcing Services",id?"Dukungan personel keamanan, operasional, fasilitas, rekrutmen, dan pelatihan.":"Security, operational staffing, facility support, recruitment, and training services."];case"contact":return[id?"Kontak Perusahaan":"Contact the Company",id?"Hubungi kantor utama atau tim rekrutmen cabang Bali.":"Reach our main office or Bali recruitment team."];case"privacy":return[id?"Kebijakan Privasi":"Privacy Notice",id?"Informasi mengenai data yang digunakan dalam proses lamaran.":"Information about data used during the application process."];case"admin":return[id?"Pratinjau Data Pelamar":"Applicant Data Preview",id?"Tampilan internal untuk presentasi alur informasi pelamar.":"An internal presentation view of applicant information flow."];case"bali":return[id?"Cabang Bali — Karier dan Layanan":"Bali Branch — Careers and Services",id?"Dukungan keamanan dan tenaga operasional untuk bisnis dan area komersial di Bali.":"Security and operational staffing support for businesses and commercial areas across Bali."];case"careers":return[id?"Lowongan Kerja Bali":"Bali Careers",id?"Temukan posisi keamanan dan operasional terbaru untuk wilayah Bali.":"Explore current security and operational opportunities across Bali."];case"job":return[local(vacancy!.title,locale),local(vacancy!.shortDescription,locale)];case"apply":return[id?`Lamar ${local(vacancy!.title,locale).replace(" — "," ")}`:`Apply for ${local(vacancy!.title,locale).replace(" — "," in ")}`,id?`Ajukan lamaran untuk posisi ${local(vacancy!.title,locale)} melalui formulir singkat.`:`Submit your application for ${local(vacancy!.title,locale)} using the short application form.`];case"success":return[id?`Lamaran ${local(vacancy!.title,locale)} Berhasil Dikirim`:`Application for ${local(vacancy!.title,locale)} Submitted`,id?"Lamaran telah diterima untuk ditinjau oleh tim rekrutmen.":"Your application has been received for review by our recruitment team."]}}
-export async function generateMetadata({params}:{params:Promise<{locale:string;path?:string[]}>}):Promise<Metadata>{const {locale:raw,path=[]}=await params;if(raw!=="id"&&raw!=="en")return{title:"404",robots:{index:false,follow:false}};const locale=raw as Locale;const route=resolveRoute(locale,path);if(!route)return{title:locale==="id"?"Halaman Tidak Ditemukan":"Page Not Found",robots:{index:false,follow:false}};const [title,description]=pageCopy(locale,route);const base=process.env.NEXT_PUBLIC_SITE_URL||"http://localhost:3000";const current=`/${locale}${path.length?`/${path.join("/")}`:""}`;const otherLocale=locale==="id"?"en":"id";const other=equivalent(locale,path);const privatePage=["admin","apply","success"].includes(route.kind);return{title,description,alternates:{canonical:`${base}${current}`,languages:{[locale]:`${base}${current}`,[otherLocale]:`${base}/${otherLocale}${other?`/${other}`:""}`}},openGraph:{title,description,url:current},twitter:{title,description},robots:privatePage?{index:false,follow:false}:undefined}}
-export default async function Page({params}:{params:Promise<{locale:string;path?:string[]}>}){const {locale:raw,path=[]}=await params;if(raw!=="id"&&raw!=="en")notFound();const locale=raw as Locale;if(!resolveRoute(locale,path))notFound();return <Site locale={locale} path={path}/>}
+const adminPreviewEnabled=process.env.ENABLE_ADMIN_PREVIEW==="true";
+
+function pageCopy(locale:Locale,route:RouteInfo):[string,string]{
+  const id=locale==="id";
+  switch(route.kind){
+    case"home":return[
+      id?"Solusi Outsourcing Profesional untuk Operasional Bisnis":"Professional Outsourcing Solutions for Business Operations",
+      id?"Dukungan tenaga kerja terlatih dan terkelola untuk keamanan, fasilitas, logistik, serta operasional perusahaan.":"Trained, well-managed personnel for security, facilities, logistics, and business operations.",
+    ];
+    case"about":return[
+      id?"Tentang Garda Karya Nusantara":"About Garda Karya Nusantara",
+      id?"Profil, cara kerja, dan komitmen operasional PT Garda Karya Nusantara.":"Learn about PT Garda Karya Nusantara, our working process, and operational commitment.",
+    ];
+    case"services":return[
+      id?"Layanan Outsourcing dan Dukungan Operasional":"Outsourcing and Operational Support Services",
+      id?"Solusi keamanan, fasilitas, outsourcing operasional, logistik, warehouse, pelatihan, dan supervisi.":"Security, facilities, operational outsourcing, logistics, warehouse, training, and supervision solutions.",
+    ];
+    case"contact":return[
+      id?"Konsultasi Kebutuhan Tenaga Kerja":"Workforce Requirements Consultation",
+      id?"Diskusikan kebutuhan layanan perusahaan melalui formulir demonstrasi yang tidak mengirim atau menyimpan data.":"Discuss business service requirements through a demonstration form that does not submit or store data.",
+    ];
+    case"privacy":return[
+      id?"Pemberitahuan Privasi Formulir Demonstrasi":"Demonstration Form Privacy Notice",
+      id?"Penjelasan mengenai informasi pada formulir demonstrasi yang tidak dikirim atau disimpan.":"How information is handled in demonstration forms that do not submit or store data.",
+    ];
+    case"admin":return[
+      id?"Pratinjau Data Pelamar Contoh":"Sample Applicant Data Preview",
+      id?"Tampilan internal berisi data demonstrasi, bukan data pelamar nyata.":"An internal view containing demonstration data, not real applicant information.",
+    ];
+    case"careerHub":return[
+      id?"Karier di Garda Karya Nusantara":"Careers at Garda Karya Nusantara",
+      id?"Kenali kehidupan kerja, manfaat, proses rekrutmen, dan jalur karier regional Garda Karya Nusantara.":"Explore working life, benefits, recruitment, and regional career paths at Garda Karya Nusantara.",
+    ];
+    case"regional":{
+      const branch=branchLabels[route.branch][locale];
+      return[
+        id?`Karier Regional ${branch}`:`${branch} Regional Careers`,
+        id?`Informasi lingkungan kerja, departemen, proses rekrutmen, dan kesempatan regional Garda Karya di ${branch}.`:`Work environment, departments, recruitment process, and regional Garda Karya opportunities in ${branch}.`,
+      ];
+    }
+    case"regionalJobs":{
+      const branch=branchLabels[route.branch][locale];
+      return[
+        id?`Lowongan Kerja ${branch}`:`${branch} Open Positions`,
+        id?`Lowongan keamanan dan operasional yang telah tersedia untuk wilayah ${branch}.`:`Available security and operational roles for the ${branch} region.`,
+      ];
+    }
+    case"job":{
+      const vacancy=getVacancy(route.slug)!;
+      return[local(vacancy.title,locale),local(vacancy.shortDescription,locale)];
+    }
+    case"apply":{
+      const vacancy=getVacancy(route.slug)!;
+      const title=local(vacancy.title,locale);
+      return[
+        id?`Demonstrasi Lamaran ${title}`:`Application Demonstration for ${title}`,
+        id?`Tinjau perilaku formulir lamaran untuk ${title}. Data tidak dikirim atau disimpan.`:`Preview the application form behavior for ${title}. Data is not submitted or stored.`,
+      ];
+    }
+    case"success":{
+      const vacancy=getVacancy(route.slug)!;
+      const title=local(vacancy.title,locale);
+      return[
+        id?`Demonstrasi Lamaran ${title} Selesai`:`Application Demonstration for ${title} Completed`,
+        id?"Alur demonstrasi selesai; tidak ada data yang dikirim, diterima, atau disimpan.":"The demonstration flow completed; no data was sent, received, or stored.",
+      ];
+    }
+  }
+}
+
+export async function generateMetadata({params}:{params:Promise<{locale:string;path?:string[]}>}):Promise<Metadata>{
+  const {locale:rawLocale,path=[]}=await params;
+  if(!isLocale(rawLocale))return{title:"404",robots:{index:false,follow:false}};
+  const route=resolveRoute(rawLocale,path);
+  if(!route||(route.kind==="admin"&&!adminPreviewEnabled))return{title:rawLocale==="id"?"Halaman Tidak Ditemukan":"Page Not Found",robots:{index:false,follow:false}};
+  const [title,description]=pageCopy(rawLocale,route);
+  const base=process.env.NEXT_PUBLIC_SITE_URL||"http://localhost:3000";
+  const currentPath=routeHref(rawLocale,route);
+  const other=alternateLocale(rawLocale);
+  const otherPath=routeHref(other,route);
+  const currentUrl=new URL(currentPath,base).toString();
+  const otherUrl=new URL(otherPath,base).toString();
+  const privatePage=["admin","apply","success"].includes(route.kind);
+  return{
+    title,
+    description,
+    alternates:{canonical:currentUrl,languages:{[rawLocale]:currentUrl,[other]:otherUrl}},
+    openGraph:{title,description,url:currentUrl},
+    twitter:{title,description},
+    robots:privatePage?{index:false,follow:false}:undefined,
+  };
+}
+
+export default async function Page({params}:{params:Promise<{locale:string;path?:string[]}>}){
+  const {locale:rawLocale,path=[]}=await params;
+  if(!isLocale(rawLocale))notFound();
+  const route=resolveRoute(rawLocale,path);
+  if(!route||(route.kind==="admin"&&!adminPreviewEnabled))notFound();
+  return <Site locale={rawLocale} path={path}/>;
+}
